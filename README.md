@@ -1,5 +1,5 @@
 ## Teste de seleção para Logap
 
-Os diagramas produzidos para o processo de desenvolvimento podem ser encontrados em:
+Toda a documentação produzida para o projeto pode ser encontrada em:
 
     documentos
