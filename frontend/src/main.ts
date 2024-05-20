@@ -13,10 +13,12 @@ import App from './App.vue'
 // Composables
 import { createApp } from 'vue'
 import indexPage from './components/Pages/indexPage.vue'
+import EstoquePage from './components/Pages/EstoquePage.vue'
 import VogalPage from './components/Pages/VogalPage.vue'
 
 const routes = [
     { path: '/', component: indexPage },
+    { path: '/estoque', component: EstoquePage},
     { path: '/vogal', component: VogalPage}
 ]
 
