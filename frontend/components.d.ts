@@ -7,6 +7,10 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AreaFiltros: typeof import('./src/components/Estoque/AreaFiltros.vue')['default']
+    AreaTabela: typeof import('./src/components/Estoque/AreaTabela.vue')['default']
+    EstoquePage: typeof import('./src/components/Pages/EstoquePage.vue')['default']
+    HeaderEstoque: typeof import('./src/components/Estoque/HeaderEstoque.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     IndexPage: typeof import('./src/components/Pages/indexPage.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
