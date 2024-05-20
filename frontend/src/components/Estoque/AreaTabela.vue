@@ -1,10 +1,22 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from 'vue';
-import { produtos, recuperaTodosProdutos } from '../../services/estoqueService';
-import { VProgressCircular, VTextField } from 'vuetify/components';
+import { produtos, recuperaTodosProdutos, fornecedores, categorias, criaProduto } from '../../services/estoqueService';
+import { VAutocomplete, VProgressCircular, VSpacer, VTextField } from 'vuetify/components';
+import { Produto } from '../../models/Produto';
+import { Fornecedor } from '../../models/Fornecedor';
+import { Categoria } from '../../models/Categoria';
 
 const loading: Ref<boolean> = ref(true)
 const erro: Ref<boolean> = ref(false)
+const mostrarNovoProduto: Ref<boolean> = ref(false)
+
+const novoProduto:Ref<Produto> = ref(new Produto())
+
+const salvarProduto = async () =>{
+    mostrarNovoProduto.value = false
+    await criaProduto(novoProduto.value)
+    await recuperaTodosProdutos()
+}
 
 onMounted(() => {
     try {
@@ -18,8 +30,9 @@ onMounted(() => {
 </script>
 
 <template>
+    
     <div id="layout">
-        <VBtn color="success" class="mb-5 mr-5">
+        <VBtn color="success" class="mb-5 mr-5" @click="mostrarNovoProduto = true">
             Novo Produto
         </VBtn>
         <VBtn color="warning" class="mb-5">
@@ -48,7 +61,27 @@ onMounted(() => {
                     </th>
                 </thead>
                 <tbody>
-                    
+                    <tr v-if="mostrarNovoProduto && !loading && !erro">
+                        <td>
+                            <VTextField label="Nome" placeholder="Nome do Produto" hide-details />
+                        </td>
+                        <td>
+                            <VTextField label="Fornecedor" placeholder="Fornecedor do Produto" hide-details />
+                        </td>
+                        <td>
+                            <VTextField label="Categoria" placeholder="Categoria do Produto" hide-details />
+                        </td>
+                        <td>
+                            <VTextField label="valor" placeholder="Valor do Produto" hide-details />
+                        </td>
+                        <td>
+                            <VTextField label="Quantidade" placeholder="Quantidade do Produto" hide-details />
+                        </td>
+                        <td class="p-0">
+                            <VTextField label="Localização" placeholder="Localização do Produto" hide-details />
+                        </td>
+
+                    </tr>
                     <!-- CASO ESTEJA CARREGANDO  -->
 
                     <tr v-if="loading">
@@ -90,10 +123,61 @@ onMounted(() => {
                 </tbody>
             </VTable>
         </div>
+
+        <!-- DIALOG DE CRIAÇÃO DE PRODUTO -->
+
+        <VDialog fullscreen v-model="mostrarNovoProduto">
+            <VCard>
+                <VToolbar class="toolbar text-white mb-5">
+                    <VBtn icon="mdi-close" @click="mostrarNovoProduto = false"></VBtn>
+
+                    <VToolbarTitle>Cadastrar Novo Produto</VToolbarTitle>
+
+                    <VSpacer></VSpacer>
+
+                    <VToolbarItems>
+                        <VBtn class="" @click="salvarProduto">Salvar Produto</VBtn>
+                    </VToolbarItems>
+                </VToolbar>
+                <VForm>
+                    <VRow>
+                        <VCol>
+                            <VTextField label="Nome" placeholder="Nome do Produto" hide-details v-model="novoProduto.name" />
+                        </VCol>
+                    </VRow>
+                    <VRow>
+                        <VCol md="6">
+                            <VAutocomplete label="Categoria" placeholder="Categoria do Produto" return-object :items="categorias" item-title="nome"
+                                v-model="novoProduto.categoria" />
+                        </VCol>
+                        <VCol md="6">
+                            <VAutocomplete label="Fornecedor" placeholder="Fornecedor do Produto" return-object :items="fornecedores" item-title="nome"
+                                v-model="novoProduto.fornecedor" />
+                        </VCol>
+                    </VRow>
+                    <VRow>
+                        <VCol md="6">
+                            <VTextField label="valor" placeholder="Valor do Produto" hide-details v-model="novoProduto.valor" />
+                        </VCol>
+                        <VCol md="6">
+                            <VTextField label="Quantidade" placeholder="Quantidade do Produto" hide-details v-model="novoProduto.quantidade" />
+                        </VCol>
+                    </VRow>
+                    <VRow>
+                        <VTextField label="Localização" placeholder="Localização do Produto" hide-details v-model="novoProduto.localizacao" />
+                    </VRow>
+                </VForm>
+            </VCard>
+        </VDialog>
+
     </div>
 </template>
 
 <style scoped>
+.info {
+    color: #675656;
+}
+
 #layout-tabela {
     border: 1px solid black;
     border-radius: 10px;
@@ -113,5 +197,9 @@ th {
 
 #tabela {
     max-height: 28em;
+}
+
+.toolbar {
+    background-color: #5C4BAA;
 }
 </style>
