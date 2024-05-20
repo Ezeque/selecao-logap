@@ -1,4 +1,20 @@
 <script setup lang="ts">
+import { Ref, ref, onMounted } from 'vue';
+import { produtos, recuperaTodosProdutos } from '../../services/estoqueService';
+import { VProgressCircular, VTextField } from 'vuetify/components';
+
+const loading: Ref<boolean> = ref(true)
+const erro: Ref<boolean> = ref(false)
+
+onMounted(() => {
+    try {
+        recuperaTodosProdutos()
+    }
+    catch (e) {
+        erro.value = true
+    }
+    loading.value = false
+})
 </script>
 
 <template>
@@ -32,24 +48,43 @@
                     </th>
                 </thead>
                 <tbody>
-                    <tr>
+                    
+                    <!-- CASO ESTEJA CARREGANDO  -->
+
+                    <tr v-if="loading">
+                        <td colspan="6" class="text-center py-5">
+                            <VProgressCircular class="text-center" indeterminate />
+                        </td>
+                    </tr>
+
+                    <!-- CASO TENHA OCORRIDO UM ERRO -->
+
+                    <tr v-if="erro">
+                        <td colspan="6" class="text-center py-5">
+                            <h2>Ocorreu um Erro ao Recuperar os Produtos</h2>
+                        </td>
+                    </tr>
+
+                    <!-- TABELA COM PRODUTOS -->
+
+                    <tr v-if="!loading && !erro" v-for="(produto, index) in produtos" :key="`produto-${index}`">
                         <td>
-                            Nome
+                            {{ produto.name }}
                         </td>
                         <td>
-                            Fornecedor
+                            {{ produto.fornecedor.nome }}
                         </td>
                         <td>
-                            Categoria
+                            {{ produto.categoria.nome }}
                         </td>
                         <td>
-                            Valor
+                            {{ produto.valor }}
                         </td>
                         <td>
-                            Quantidade
+                            {{ produto.quantidade }}
                         </td>
                         <td>
-                            Localização
+                            {{ produto.localizacao }}
                         </td>
                     </tr>
                 </tbody>
@@ -76,7 +111,7 @@ th {
     background-color: white;
 }
 
-#tabela{
+#tabela {
     max-height: 28em;
 }
 </style>
