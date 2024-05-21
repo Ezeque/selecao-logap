@@ -2,7 +2,7 @@
 import { Ref, ref } from 'vue';
 import { Produto } from '../../models/Produto';
 import { VAutocomplete, VTextField } from 'vuetify/components';
-import { erro, loading, fornecedores, categorias, criaCategoria, recuperaTodosProdutos, criaFornecedor, criaProduto } from '../../services/estoqueService';
+import { produtoExcluir, mostrarDialogoExcluirProduto, erro, loading, fornecedores, categorias, criaCategoria, recuperaTodosProdutos, criaFornecedor, criaProduto } from '../../services/estoqueService';
 import { Categoria } from '../../models/Categoria';
 
 const props = defineProps({

@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from 'vue';
 import CriarProduto from './CriarProduto.vue';
-import { erro, loading, produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
+import { produtoExcluir, mostrarDialogoExcluirProduto, baixarRelatorio, erro, loading, produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
 import { VProgressCircular } from 'vuetify/components';
 import { Produto } from '../../models/Produto';
 import LinhaProduto from '../Utils/LinhaProduto.vue';
 
-/* GUARDA A INSTÂNCIA DO PRODUTO A SER EXCLUÍDO */
-const produtoExcluir: Ref<Produto | null> = ref(null)
-
-/* GUARDA SE DEVE SER EXIBIDO O DIALOG PARA EXCLUIR PROPDUTO */
-const mostrarDialogoExcluirProduto: Ref<boolean> = ref(false)
 
 onMounted(async () => {
     try {
@@ -42,7 +37,7 @@ const deletaProduto = async (id: number) => {
         <VBtn color="success" class="mb-5 mr-5" @click="mostrarNovoProduto = true">
             Novo Produto
         </VBtn>
-        <VBtn color="warning" class="mb-5">
+        <VBtn @click="baixarRelatorio" color="warning" class="mb-5">
             Gerar Relatório
         </VBtn>
         <div id="layout-tabela">
