@@ -18,9 +18,9 @@ const salvarProduto = async () =>{
     await recuperaTodosProdutos()
 }
 
-onMounted(() => {
+onMounted(async () => {
     try {
-        recuperaTodosProdutos()
+        await recuperaTodosProdutos()
     }
     catch (e) {
         erro.value = true
