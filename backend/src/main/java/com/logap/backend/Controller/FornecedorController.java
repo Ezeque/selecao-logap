@@ -18,7 +18,7 @@ public class FornecedorController {
         return fornecedorService.criaFornecedor(fornecedor);
     }
 
-    @PostMapping("/excluir")
+    @DeleteMapping("/excluir")
     public void excluirFornecedor(@RequestBody Fornecedor fornecedor){
         fornecedorService.excluirFornecedor(fornecedor);
     }

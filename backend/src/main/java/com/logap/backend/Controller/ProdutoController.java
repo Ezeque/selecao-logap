@@ -33,4 +33,9 @@ public class ProdutoController {
     public Optional<Produto> recuperaProduto(@RequestParam(name = "id") Long id){
         return produtoService.recuperaProduto(id);
     }
+
+    @DeleteMapping("/excluir")
+    public void excluirProduto(@RequestParam Long id){
+        produtoService.excluirProduto(id);
+    }
 }

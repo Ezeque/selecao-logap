@@ -5,36 +5,36 @@ import { Fornecedor } from "../models/Fornecedor"
 import { Categoria } from "../models/Categoria"
 
 /* RECEBE TODOS OS PRODUTOS*/
-export const produtos:Ref<Produto[]> = ref([])
+export const produtos: Ref<Produto[]> = ref([])
 
-export const fornecedores:Ref<Fornecedor[]> = ref([])
+export const fornecedores: Ref<Fornecedor[]> = ref([])
 
-export const categorias:Ref<Categoria[]> = ref([])
+export const categorias: Ref<Categoria[]> = ref([])
 
 export const mostrarNovoProduto: Ref<boolean> = ref(false)
 
 const backend_address = import.meta.env.VITE_BACKEND_ADDRESS
 
 /* RECUPERA TODOS OS PRODUTOS NO BANCO */
-const todosProdutosRequest = async () =>{
+const todosProdutosRequest = async () => {
     let res = await axios.get(`${backend_address}/produtos/todos`)
     return res.data
-} 
+}
 
 /* RECUPERA TODOS OS FORNECEDORES NO BANCO */
-const todosFornecedoresRequest = async () =>{
+const todosFornecedoresRequest = async () => {
     let res = await axios.get(`${backend_address}/fornecedor/todos`)
     return res.data
-} 
+}
 
 /* RECUPERA TODAS AS CATEGORIAS NO BANCO */
-const todasCategoriasRequest = async () =>{
+const todasCategoriasRequest = async () => {
     let res = await axios.get(`${backend_address}/categoria/todas`)
     return res.data
-} 
+}
 
 /* CRIA PRODUTO NO BANCO */
-const criaProdutoRequest = async (produto: Produto) =>{
+const criaProdutoRequest = async (produto: Produto) => {
     let res = await axios.post(`${backend_address}/produtos/salvar`,
         {
             name: produto.name,
@@ -46,10 +46,19 @@ const criaProdutoRequest = async (produto: Produto) =>{
         }
     )
     return res.data
-} 
+}
+
+/* DELETA PRODUTO DO BANCO */
+const excluiProdutoRequest = async (id: number) => {
+    await axios.delete(`${backend_address}/produtos/excluir`,
+        {
+            params: {id}
+        }
+    )
+}
 
 /* CRIA CATEGORIA NO BANCO */
-const criaCategoriaRequest = async (categoria: Categoria) =>{
+const criaCategoriaRequest = async (categoria: Categoria) => {
     let res = await axios.post(`${backend_address}/categoria/criar`,
         {
             nome: categoria.nome
@@ -59,7 +68,7 @@ const criaCategoriaRequest = async (categoria: Categoria) =>{
 }
 
 /* CRIA FORNECEDOR NO BANCO */
-const criaFornecedorRequest = async (fornecedor: Fornecedor) =>{
+const criaFornecedorRequest = async (fornecedor: Fornecedor) => {
     let res = await axios.post(`${backend_address}/fornecedor/criar`,
         {
             nome: fornecedor.nome
@@ -68,29 +77,41 @@ const criaFornecedorRequest = async (fornecedor: Fornecedor) =>{
     return res.data
 }
 
-export const recuperaTodosProdutos = async () =>{
-    let res  = await todosProdutosRequest()
+/* REALIZA BUSCA DE PRODUTOS */
+export const recuperaTodosProdutos = async () => {
+    let res = await todosProdutosRequest()
     produtos.value = res
-    recuperarFornecedores()
-    recuperarCategorias()
+    await recuperarFornecedores()
+    await recuperarCategorias()
 }
 
-export const criaProduto = async (produto:Produto) =>{
+/* CRIA PRODUTO */
+export const criaProduto = async (produto: Produto) => {
     await criaProdutoRequest(produto)
 }
 
-export const criaCategoria = async (categoria:Categoria) =>{
+/* EXCLUI PRODUTO */
+export const excluiProduto = async (id: number) => {
+    await excluiProdutoRequest(id)
+    await recuperaTodosProdutos()
+}
+
+/* CRIA CATEGORIA */
+export const criaCategoria = async (categoria: Categoria) => {
     await criaCategoriaRequest(categoria)
 }
 
-export const criaFornecedor = async (fornecedor:Fornecedor) =>{
+/* CRIA FORNECEDOR */
+export const criaFornecedor = async (fornecedor: Fornecedor) => {
     await criaFornecedorRequest(fornecedor)
 }
 
+/* RECUPERA TODOS OS FORNECEDORES */
 const recuperarFornecedores = async () => {
     fornecedores.value = await todosFornecedoresRequest()
 }
 
+/* RECUPERA TODAS AS CATEGORIAS */
 const recuperarCategorias = async () => {
     categorias.value = await todasCategoriasRequest()
 }

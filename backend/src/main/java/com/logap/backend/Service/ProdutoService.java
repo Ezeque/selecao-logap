@@ -29,4 +29,9 @@ public class ProdutoService {
     public Optional<Produto> recuperaProduto(Long id){
         return produtoRepository.findById(id);
     }
+
+    public void excluirProduto(Long id) {
+        Optional<Produto> produto = recuperaProduto(id);
+        produto.ifPresent(value -> produtoRepository.delete(value));
+    }
 }

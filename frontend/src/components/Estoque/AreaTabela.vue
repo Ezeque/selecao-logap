@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from 'vue';
 import CriarProduto from './CriarProduto.vue';
-import { produtos, recuperaTodosProdutos, mostrarNovoProduto } from '../../services/estoqueService';
-import { VProgressCircular} from 'vuetify/components';
+import { produtos, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
+import { VProgressCircular, VTooltip } from 'vuetify/components';
+import { Produto } from '../../models/Produto';
 
+/* GUARDA SE TELA ESTÁ CARREGANDO */
 const loading: Ref<boolean> = ref(true)
+
+/* GUARDA SE OCORREU ERRO */
 const erro: Ref<boolean> = ref(false)
+
+/* GUARDA A INSTÂNCIA DO PRODUTO A SER EXCLUÍDO */
+const produtoExcluir: Ref<Produto | null> = ref(null)
+
+/* GUARDA SE DEVE SER EXIBIDO O DIALOG PARA EXCLUIR PROPDUTO */
+const mostrarDialogoExcluirProduto: Ref<boolean> = ref(false)
 
 onMounted(async () => {
     try {
@@ -16,6 +26,19 @@ onMounted(async () => {
     }
     loading.value = false
 })
+
+/* REALIZA DELEÇÃO DE PRODUTO */
+const deletaProduto = async (id: number) => {
+    loading.value = true;
+    try {
+        await excluiProduto(id)
+        loading.value = false
+    }
+    catch (e) {
+        erro.value = true
+        loading.value = false
+    }
+}
 </script>
 
 <template>
@@ -47,6 +70,9 @@ onMounted(async () => {
                     </th>
                     <th>
                         Localização
+                    </th>
+                    <th>
+                        Ações
                     </th>
                 </thead>
                 <tbody>
@@ -87,6 +113,14 @@ onMounted(async () => {
                         <td>
                             {{ produto.localizacao }}
                         </td>
+                        <td>
+                            <VTooltip location="top" text="teste">
+                                <template v-slot:activator="{ props }">
+                                    <VBtn @click="mostrarDialogoExcluirProduto = true; produtoExcluir = produto"
+                                        v-bind="props" color="error" size="30" icon="mdi-trash-can-outline" />
+                                </template>
+                            </VTooltip>
+                        </td>
                     </tr>
                 </tbody>
             </VTable>
@@ -96,6 +130,37 @@ onMounted(async () => {
 
         <VDialog fullscreen v-model="mostrarNovoProduto">
             <CriarProduto />
+        </VDialog>
+
+        <!-- DIALOG DE CRIAÇÃO DE PRODUTO -->
+
+        <VDialog class="p-5" width="600" v-model="mostrarDialogoExcluirProduto">
+            <VCard class="text-center p-5">
+                <VCardTitle>
+                    Tem certeza de que deseja excluir o seguinte produto?
+                </VCardTitle>
+                <VCardSubtitle class="font-weight-bold text-xl">
+                    Nome: {{produtoExcluir.name}} |
+                    Fornecedor: {{ produtoExcluir.fornecedor.nome }}
+                </VCardSubtitle>
+                <VCardText>
+                    <VRow>
+                        <VCol>
+                            <VBtn width="100%"
+                                @click="deletaProduto(produtoExcluir.id); mostrarDialogoExcluirProduto = false"
+                                color="error">
+                                Confirmar
+                            </VBtn>
+                        </VCol>
+                        <VCol>
+                            <VBtn width="100%" @click="mostrarDialogoExcluirProduto = false" color="success">
+                                Cancelar
+                            </VBtn>
+                        </VCol>
+                    </VRow>
+
+                </VCardText>
+            </VCard>
         </VDialog>
 
     </div>
