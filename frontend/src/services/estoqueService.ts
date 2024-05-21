@@ -2,7 +2,7 @@ import { Ref, ref } from "vue"
 import { Produto } from "../models/Produto"
 import { Fornecedor } from "../models/Fornecedor"
 import { Categoria } from "../models/Categoria"
-import { criaCategoriaRequest, criaFornecedorRequest, criaProdutoRequest, excluiProdutoRequest, todasCategoriasRequest, todosFornecedoresRequest, todosProdutosRequest } from "../api/estoque"
+import { ProdutosFaltaRequest, criaCategoriaRequest, criaFornecedorRequest, criaProdutoRequest, excluiProdutoRequest, todasCategoriasRequest, todosFornecedoresRequest, todosProdutosRequest } from "../api/estoque"
 
 /* RECEBE TODOS OS PRODUTOS*/
 export const produtos: Ref<Produto[]> = ref([])
@@ -36,6 +36,12 @@ export const recuperaTodosProdutos = async () => {
     aplicarFiltros()
     await recuperarFornecedores()
     await recuperarCategorias()
+}
+
+/* REALIZA BUSCA DE PRODUTOS EM FALTA*/
+export const recuperaProdutosFalta = async () => {
+    let res: Produto[] = await ProdutosFaltaRequest()
+    return res
 }
 
 /* CRIA PRODUTO */

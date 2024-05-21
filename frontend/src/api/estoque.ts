@@ -12,6 +12,12 @@ export const todosProdutosRequest = async () => {
     return res.data
 }
 
+/* RECUPERA PRODUTOS EM FALTA NO BANCO */
+export const ProdutosFaltaRequest = async () => {
+    let res = await axios.get(`${backend_address}/produtos/falta`)
+    return res.data
+}
+
 /* RECUPERA TODOS OS FORNECEDORES NO BANCO */
 export const todosFornecedoresRequest = async () => {
     let res = await axios.get(`${backend_address}/fornecedor/todos`)

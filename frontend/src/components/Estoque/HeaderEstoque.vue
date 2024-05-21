@@ -1,9 +1,21 @@
+<script setup lang="ts">
+import { Ref, onMounted, ref } from 'vue';
+import { Produto } from '../../models/Produto';
+import { recuperaProdutosFalta } from '../../services/estoqueService';
+
+const produtosEmFalta: Ref<Produto[]> = ref([])
+
+onMounted(async () => {
+    produtosEmFalta.value = await recuperaProdutosFalta()
+})
+</script>
+
 <template>
     <div id="layout-header">
         <h1>
             Lista de Produtos
         </h1>
-        <span>XX Produtos em Falta</span>
+        <span>{{produtosEmFalta.length}} Produtos em Falta</span>
     </div>
 </template>
 
