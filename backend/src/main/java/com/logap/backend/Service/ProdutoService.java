@@ -2,6 +2,7 @@ package com.logap.backend.Service;
 
 import com.logap.backend.Models.Produto;
 import com.logap.backend.Repository.ProdutoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,11 @@ public class ProdutoService {
     }
 
     public Produto salvaProduto(Produto produto){
-        System.out.println(produto.getName());
+        return produtoRepository.save(produto);
+    }
+
+    @Transactional
+    public Produto editaProduto(Produto produto){
         return produtoRepository.save(produto);
     }
 

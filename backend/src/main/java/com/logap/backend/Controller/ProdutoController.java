@@ -19,6 +19,11 @@ public class ProdutoController {
         return produtoService.salvaProduto(produto);
     }
 
+    @PutMapping("/editar")
+    public Produto editarProduto(@RequestBody Produto produto){
+        return produtoService.salvaProduto(produto);
+    }
+
     @GetMapping("/todos")
     public List<Produto> recuperaTodosProdutos(){
         return produtoService.recuperaTodosProdutos();
