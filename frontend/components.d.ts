@@ -14,6 +14,7 @@ declare module 'vue' {
     HeaderEstoque: typeof import('./src/components/Estoque/HeaderEstoque.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     IndexPage: typeof import('./src/components/Pages/indexPage.vue')['default']
+    LinhaProduto: typeof import('./src/components/Utils/LinhaProduto.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SelecaoModulo: typeof import('./src/components/Utils/SelecaoModulo.vue')['default']

@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from 'vue';
 import CriarProduto from './CriarProduto.vue';
-import { produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
-import { VProgressCircular, VTooltip } from 'vuetify/components';
+import { erro, loading, produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
+import { VProgressCircular } from 'vuetify/components';
 import { Produto } from '../../models/Produto';
-
-/* GUARDA SE TELA ESTÁ CARREGANDO */
-const loading: Ref<boolean> = ref(true)
-
-/* GUARDA SE OCORREU ERRO */
-const erro: Ref<boolean> = ref(false)
+import LinhaProduto from '../Utils/LinhaProduto.vue';
 
 /* GUARDA A INSTÂNCIA DO PRODUTO A SER EXCLUÍDO */
 const produtoExcluir: Ref<Produto | null> = ref(null)
@@ -94,34 +89,7 @@ const deletaProduto = async (id: number) => {
 
                     <!-- TABELA COM PRODUTOS -->
 
-                    <tr v-if="!loading && !erro" v-for="(produto, index) in produtosFiltrados" :key="`produto-${index}`">
-                        <td>
-                            {{ produto.name }}
-                        </td>
-                        <td>
-                            {{ produto.fornecedor.nome }}
-                        </td>
-                        <td>
-                            {{ produto.categoria.nome }}
-                        </td>
-                        <td>
-                            {{ produto.valor }}
-                        </td>
-                        <td>
-                            {{ produto.quantidade }}
-                        </td>
-                        <td>
-                            {{ produto.localizacao }}
-                        </td>
-                        <td>
-                            <VTooltip location="top" text="teste">
-                                <template v-slot:activator="{ props }">
-                                    <VBtn @click="mostrarDialogoExcluirProduto = true; produtoExcluir = produto"
-                                        v-bind="props" color="error" size="30" icon="mdi-trash-can-outline" />
-                                </template>
-                            </VTooltip>
-                        </td>
-                    </tr>
+                    <LinhaProduto v-for="(produto, index) in produtosFiltrados" :produto="produto"/>
                 </tbody>
             </VTable>
         </div>
