@@ -7,16 +7,27 @@ import { criaCategoriaRequest, criaFornecedorRequest, criaProdutoRequest, exclui
 /* RECEBE TODOS OS PRODUTOS*/
 export const produtos: Ref<Produto[]> = ref([])
 
+export const produtosFiltrados: Ref<Produto[]> = ref([])
+
 export const fornecedores: Ref<Fornecedor[]> = ref([])
 
 export const categorias: Ref<Categoria[]> = ref([])
 
 export const mostrarNovoProduto: Ref<boolean> = ref(false)
 
+export const filtroNome: Ref<string|null> = ref(null)
+
+export const filtroCategoria: Ref<string|null> = ref(null)
+
+export const filtroFornecedor: Ref<string|null> = ref(null)
+
+export const mostrarEsgotados: Ref<boolean> = ref(true)
+
 /* REALIZA BUSCA DE PRODUTOS */
 export const recuperaTodosProdutos = async () => {
     let res = await todosProdutosRequest()
     produtos.value = res
+    aplicarFiltros()
     await recuperarFornecedores()
     await recuperarCategorias()
 }
@@ -50,4 +61,21 @@ const recuperarFornecedores = async () => {
 /* RECUPERA TODAS AS CATEGORIAS */
 const recuperarCategorias = async () => {
     categorias.value = await todasCategoriasRequest()
+}
+
+/* APLICA OS FILTROS */
+export const aplicarFiltros = async () => {
+    produtosFiltrados.value = produtos.value
+    if(filtroNome.value){
+        produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.name.indexOf(filtroNome.value!) > -1)
+    }
+    if(filtroCategoria!.value){
+        produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.categoria.nome.indexOf(filtroCategoria.value!) > -1)
+    }
+    if(filtroFornecedor.value){
+        produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.fornecedor.nome.indexOf(filtroFornecedor.value!) > -1)
+    }
+    if(!mostrarEsgotados.value){
+        produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.quantidade > 0)
+    }
 }
