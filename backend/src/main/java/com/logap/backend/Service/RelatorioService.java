@@ -108,7 +108,9 @@ public class RelatorioService {
                 for(Map.Entry<String, List<Produto>> fornecedor : fornecedoresEmFalta.entrySet()){
                     tabelaFornecedoresFalta.addCell(fornecedor.getKey());
                     for(Produto produto : fornecedor.getValue()){
-                        produtosFornecedor = produtosFornecedor.concat(produto.getName() + "\n");
+                        if(produto.getQuantidade() == 0){
+                            produtosFornecedor = produtosFornecedor.concat(produto.getName() + "\n");
+                        }
                     }
                     tabelaFornecedoresFalta.addCell(produtosFornecedor);
                 }

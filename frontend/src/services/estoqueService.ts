@@ -2,7 +2,7 @@ import { Ref, ref } from "vue"
 import { Produto } from "../models/Produto"
 import { Fornecedor } from "../models/Fornecedor"
 import { Categoria } from "../models/Categoria"
-import { ProdutosFaltaRequest, criaCategoriaRequest, criaFornecedorRequest, criaProdutoRequest, excluiProdutoRequest, todasCategoriasRequest, todosFornecedoresRequest, todosProdutosRequest } from "../api/estoque"
+import { ProdutosFaltaRequest, criaCategoriaRequest, criaFornecedorRequest, criaProdutoRequest, excluiProdutoRequest, geraRelatorio, todasCategoriasRequest, todosFornecedoresRequest, todosProdutosRequest } from "../api/estoque"
 
 /* RECEBE TODOS OS PRODUTOS*/
 export const produtos: Ref<Produto[]> = ref([])
@@ -28,6 +28,12 @@ export const loading: Ref<boolean> = ref(true)
 
 /* GUARDA SE OCORREU ERRO */
 export const erro: Ref<boolean> = ref(false)
+
+/* GUARDA SE DEVE SER EXIBIDO O DIALOG PARA EXCLUIR PROPDUTO */
+export const mostrarDialogoExcluirProduto: Ref<boolean> = ref(false)
+
+/* GUARDA A INSTÂNCIA DO PRODUTO A SER EXCLUÍDO */
+export const produtoExcluir: Ref<Produto | null> = ref(null)
 
 /* REALIZA BUSCA DE PRODUTOS */
 export const recuperaTodosProdutos = async () => {
@@ -90,4 +96,17 @@ export const aplicarFiltros = async () => {
     if(!mostrarEsgotados.value){
         produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.quantidade > 0)
     }
+}
+
+/* GERA E REALIZA DOWNLOAD DO RELATÓRIO */
+export const baixarRelatorio = async () =>{
+    let res = await geraRelatorio()
+    const blob = new Blob([res], {type: "application/pdf"})
+    const linkRelatorio = document.createElement("a")
+    linkRelatorio.href = window.URL.createObjectURL(blob)
+    linkRelatorio.download = `Relatório`
+    document.body.appendChild(linkRelatorio)
+    linkRelatorio.click()
+    document.body.removeChild(linkRelatorio)
+    window.URL.revokeObjectURL(linkRelatorio.href)
 }

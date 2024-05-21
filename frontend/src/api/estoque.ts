@@ -73,3 +73,11 @@ export const criaFornecedorRequest = async (fornecedor: Fornecedor) => {
     )
     return res.data
 }
+
+/* GERA RELATÓRIO */
+export const geraRelatorio = async () => {
+    let res = await axios.get(`${backend_address}/relatorio/criar`,{
+        responseType: 'arraybuffer'
+    })
+    return res.data
+}
