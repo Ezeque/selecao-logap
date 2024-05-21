@@ -25,7 +25,7 @@ public class RelatorioService {
     public byte[] criaRelatorio(){
         List<Produto> produtos = produtoService.recuperaTodosProdutos();
         List<Produto> produtosEmFalta = produtoService.recuperaProdutosFalta();
-        Map<String, List<Produto>> fornecedoresEmFalta = infereFornecedoresFalta(produtos);
+        Map<String, List<Produto>> fornecedoresEmFalta = infereFornecedoresFalta(produtosEmFalta);
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try{
@@ -87,9 +87,9 @@ public class RelatorioService {
                     tabelaProdutosFalta.addCell(produto.getFornecedor().getNome());
                     tabelaProdutosFalta.addCell(produto.getCategoria().getNome());
                 }
-                documento.add(tabelaProdutosFalta);
-                documento.add(new Paragraph("\n\n\n\n\n"));
             }
+            documento.add(tabelaProdutosFalta);
+            documento.add(new Paragraph("\n\n\n\n\n"));
 
             /* TABELA DE FORNECEDORES DE PRODUTOS EM FALTA */
 
@@ -104,18 +104,18 @@ public class RelatorioService {
                 tabelaProdutos.addCell("Não há produtos em falta.");
             }
             else{
-                String produtosFornecedor = "";
                 for(Map.Entry<String, List<Produto>> fornecedor : fornecedoresEmFalta.entrySet()){
+                    String produtosFornecedor = "";
                     tabelaFornecedoresFalta.addCell(fornecedor.getKey());
                     for(Produto produto : fornecedor.getValue()){
                         if(produto.getQuantidade() == 0){
-                            produtosFornecedor = produtosFornecedor.concat(produto.getName() + "\n");
+                            produtosFornecedor = produtosFornecedor.concat(produto.getName() + "\n\n");
                         }
                     }
                     tabelaFornecedoresFalta.addCell(produtosFornecedor);
                 }
-                documento.add(tabelaFornecedoresFalta);
             }
+            documento.add(tabelaFornecedoresFalta);
 
 
             documento.close();
