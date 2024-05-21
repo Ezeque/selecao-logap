@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from 'vue';
 import CriarProduto from './CriarProduto.vue';
-import { produtos, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
+import { produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
 import { VProgressCircular, VTooltip } from 'vuetify/components';
 import { Produto } from '../../models/Produto';
 
@@ -94,7 +94,7 @@ const deletaProduto = async (id: number) => {
 
                     <!-- TABELA COM PRODUTOS -->
 
-                    <tr v-if="!loading && !erro" v-for="(produto, index) in produtos" :key="`produto-${index}`">
+                    <tr v-if="!loading && !erro" v-for="(produto, index) in produtosFiltrados" :key="`produto-${index}`">
                         <td>
                             {{ produto.name }}
                         </td>
