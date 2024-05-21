@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AreaFiltros: typeof import('./src/components/Estoque/AreaFiltros.vue')['default']
     AreaTabela: typeof import('./src/components/Estoque/AreaTabela.vue')['default']
+    CriarProduto: typeof import('./src/components/Estoque/CriarProduto.vue')['default']
     EstoquePage: typeof import('./src/components/Pages/EstoquePage.vue')['default']
     HeaderEstoque: typeof import('./src/components/Estoque/HeaderEstoque.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']

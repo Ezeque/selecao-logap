@@ -11,6 +11,8 @@ export const fornecedores:Ref<Fornecedor[]> = ref([])
 
 export const categorias:Ref<Categoria[]> = ref([])
 
+export const mostrarNovoProduto: Ref<boolean> = ref(false)
+
 const backend_address = import.meta.env.VITE_BACKEND_ADDRESS
 
 /* RECUPERA TODOS OS PRODUTOS NO BANCO */
