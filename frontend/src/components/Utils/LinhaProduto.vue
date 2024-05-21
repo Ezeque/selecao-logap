@@ -2,7 +2,7 @@
 import { Ref, ref } from 'vue';
 import { Produto } from '../../models/Produto';
 import { VAutocomplete, VTextField } from 'vuetify/components';
-import { produtoExcluir, mostrarDialogoExcluirProduto, erro, loading, fornecedores, categorias, criaCategoria, recuperaTodosProdutos, criaFornecedor, criaProduto } from '../../services/estoqueService';
+import { produtoExcluir, mostrarDialogoExcluirProduto, erro, loading, fornecedores, categorias, criaCategoria, recuperaTodosProdutos, criaFornecedor, criaProduto, editarProduto } from '../../services/estoqueService';
 import { Categoria } from '../../models/Categoria';
 
 const props = defineProps({
@@ -18,7 +18,7 @@ const edicao = async (produto: Produto) => {
     loading.value = true
     try {
         /* ATUALIZARÁ O PRODUTO SALVO NO BANCO */
-        await criaProduto(produto)
+        await editarProduto(produto)
         editar.value = !(editar.value)
     } catch (e) {
         loading.value = false

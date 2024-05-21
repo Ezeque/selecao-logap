@@ -45,6 +45,22 @@ export const criaProdutoRequest = async (produto: Produto) => {
     return res.data
 }
 
+/* ATUALIZA PRODUTO NO BANCO */
+export const atualizaProdutoRequest = async (produto: Produto) => {
+    let res = await axios.post(`${backend_address}/produtos/salvar`,
+        {
+            id: produto.id,
+            name: produto.name,
+            localizacao: produto.localizacao,
+            valor: produto.valor,
+            quantidade: produto.quantidade,
+            categoria: produto.categoria,
+            fornecedor: produto.fornecedor
+        }
+    )
+    return res.data
+}
+
 /* DELETA PRODUTO DO BANCO */
 export const excluiProdutoRequest = async (id: number) => {
     await axios.delete(`${backend_address}/produtos/excluir`,
