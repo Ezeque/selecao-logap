@@ -23,6 +23,12 @@ export const filtroFornecedor: Ref<string|null> = ref(null)
 
 export const mostrarEsgotados: Ref<boolean> = ref(true)
 
+/* GUARDA SE TELA ESTÁ CARREGANDO */
+export const loading: Ref<boolean> = ref(true)
+
+/* GUARDA SE OCORREU ERRO */
+export const erro: Ref<boolean> = ref(false)
+
 /* REALIZA BUSCA DE PRODUTOS */
 export const recuperaTodosProdutos = async () => {
     let res = await todosProdutosRequest()
