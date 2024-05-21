@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from 'vue';
-import { produtos, recuperaTodosProdutos, fornecedores, categorias, criaProduto } from '../../services/estoqueService';
+import { produtos, recuperaTodosProdutos, fornecedores, categorias, criaProduto, criaCategoria, criaFornecedor } from '../../services/estoqueService';
 import { VAutocomplete, VProgressCircular, VSpacer, VTextField } from 'vuetify/components';
 import { Produto } from '../../models/Produto';
 import { Fornecedor } from '../../models/Fornecedor';
@@ -9,14 +9,32 @@ import { Categoria } from '../../models/Categoria';
 const loading: Ref<boolean> = ref(true)
 const erro: Ref<boolean> = ref(false)
 const mostrarNovoProduto: Ref<boolean> = ref(false)
+const categoriaAutocomplete: Ref<any> = ref({ filteredItems: [] })
+const fornecedorAutocomplete: Ref<any> = ref({ filteredItems: [] })
 
-const novoProduto:Ref<Produto> = ref(new Produto())
+const novoProduto: Ref<Produto> = ref(new Produto())
+const novaCategoria: Ref<Categoria> = ref(new Categoria())
+const novoFornecedor: Ref<Fornecedor> = ref(new Fornecedor())
 
-const salvarProduto = async () =>{
+const salvarProduto = async () => {
     mostrarNovoProduto.value = false
     await criaProduto(novoProduto.value)
     await recuperaTodosProdutos()
 }
+
+const salvarCategoria = async (nomeCategoria: string) => {
+    novaCategoria.value.nome = nomeCategoria
+    await criaCategoria(novaCategoria.value)
+    await recuperaTodosProdutos()
+}
+
+const salvarFornecedor = async (nomeFornecedor: string) => {
+    novoFornecedor.value.nome = nomeFornecedor
+    await criaFornecedor(novoFornecedor.value)
+    await recuperaTodosProdutos()
+}
+
+
 
 onMounted(async () => {
     try {
@@ -30,7 +48,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    
+
     <div id="layout">
         <VBtn color="success" class="mb-5 mr-5" @click="mostrarNovoProduto = true">
             Novo Produto
@@ -61,27 +79,6 @@ onMounted(async () => {
                     </th>
                 </thead>
                 <tbody>
-                    <tr v-if="mostrarNovoProduto && !loading && !erro">
-                        <td>
-                            <VTextField label="Nome" placeholder="Nome do Produto" hide-details />
-                        </td>
-                        <td>
-                            <VTextField label="Fornecedor" placeholder="Fornecedor do Produto" hide-details />
-                        </td>
-                        <td>
-                            <VTextField label="Categoria" placeholder="Categoria do Produto" hide-details />
-                        </td>
-                        <td>
-                            <VTextField label="valor" placeholder="Valor do Produto" hide-details />
-                        </td>
-                        <td>
-                            <VTextField label="Quantidade" placeholder="Quantidade do Produto" hide-details />
-                        </td>
-                        <td class="p-0">
-                            <VTextField label="Localização" placeholder="Localização do Produto" hide-details />
-                        </td>
-
-                    </tr>
                     <!-- CASO ESTEJA CARREGANDO  -->
 
                     <tr v-if="loading">
@@ -142,29 +139,49 @@ onMounted(async () => {
                 <VForm>
                     <VRow>
                         <VCol>
-                            <VTextField label="Nome" placeholder="Nome do Produto" hide-details v-model="novoProduto.name" />
+                            <VTextField label="Nome" placeholder="Nome do Produto" hide-details
+                                v-model="novoProduto.name" />
                         </VCol>
                     </VRow>
                     <VRow>
                         <VCol md="6">
-                            <VAutocomplete label="Categoria" placeholder="Categoria do Produto" return-object :items="categorias" item-title="nome"
-                                v-model="novoProduto.categoria" />
+                            <VAutocomplete ref="categoriaAutocomplete" label="Categoria"
+                                placeholder="Categoria do Produto" return-object :items="categorias" item-title="nome"
+                                v-model="novoProduto.categoria" >
+                                <template v-if="mostrarNovoProduto" #append-inner>
+                                    <VBtn @click="salvarCategoria(categoriaAutocomplete?.modelValue)" color="success" 
+                                    v-if="categoriaAutocomplete?.filteredItems.length == 0 && categoriaAutocomplete.modelValue != ''">
+                                        Criar Categoria {{ categoriaAutocomplete?.modelValue }}
+                                    </VBtn>
+                                </template>
+                            </VAutocomplete>
                         </VCol>
                         <VCol md="6">
-                            <VAutocomplete label="Fornecedor" placeholder="Fornecedor do Produto" return-object :items="fornecedores" item-title="nome"
-                                v-model="novoProduto.fornecedor" />
+                            <VAutocomplete ref="fornecedorAutocomplete" label="Fornecedor"
+                                placeholder="Fornecedor do Produto" return-object :items="fornecedores" item-title="nome"
+                                v-model="novoProduto.fornecedor" >
+                                <template v-if="mostrarNovoProduto" #append-inner>
+                                    <VBtn @click="salvarFornecedor(fornecedorAutocomplete?.modelValue)" color="success" 
+                                    v-if="fornecedorAutocomplete?.filteredItems.length == 0 && fornecedorAutocomplete.modelValue != ''">
+                                        Criar Fornecedor {{ fornecedorAutocomplete?.modelValue }}
+                                    </VBtn>
+                                </template>
+                            </VAutocomplete>
                         </VCol>
                     </VRow>
                     <VRow>
                         <VCol md="6">
-                            <VTextField label="valor" placeholder="Valor do Produto" hide-details v-model="novoProduto.valor" />
+                            <VTextField label="valor" placeholder="Valor do Produto" hide-details
+                                v-model="novoProduto.valor" />
                         </VCol>
                         <VCol md="6">
-                            <VTextField label="Quantidade" placeholder="Quantidade do Produto" hide-details v-model="novoProduto.quantidade" />
+                            <VTextField label="Quantidade" placeholder="Quantidade do Produto" hide-details
+                                v-model="novoProduto.quantidade" />
                         </VCol>
                     </VRow>
                     <VRow>
-                        <VTextField label="Localização" placeholder="Localização do Produto" hide-details v-model="novoProduto.localizacao" />
+                        <VTextField label="Localização" placeholder="Localização do Produto" hide-details
+                            v-model="novoProduto.localizacao" />
                     </VRow>
                 </VForm>
             </VCard>

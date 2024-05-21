@@ -19,6 +19,18 @@ const todosProdutosRequest = async () =>{
     return res.data
 } 
 
+/* RECUPERA TODOS OS FORNECEDORES NO BANCO */
+const todosFornecedoresRequest = async () =>{
+    let res = await axios.get(`${backend_address}/fornecedor/todos`)
+    return res.data
+} 
+
+/* RECUPERA TODAS AS CATEGORIAS NO BANCO */
+const todasCategoriasRequest = async () =>{
+    let res = await axios.get(`${backend_address}/categoria/todas`)
+    return res.data
+} 
+
 /* CRIA PRODUTO NO BANCO */
 const criaProdutoRequest = async (produto: Produto) =>{
     let res = await axios.post(`${backend_address}/produtos/salvar`,
@@ -34,37 +46,49 @@ const criaProdutoRequest = async (produto: Produto) =>{
     return res.data
 } 
 
+/* CRIA CATEGORIA NO BANCO */
+const criaCategoriaRequest = async (categoria: Categoria) =>{
+    let res = await axios.post(`${backend_address}/categoria/criar`,
+        {
+            nome: categoria.nome
+        }
+    )
+    return res.data
+}
+
+/* CRIA FORNECEDOR NO BANCO */
+const criaFornecedorRequest = async (fornecedor: Fornecedor) =>{
+    let res = await axios.post(`${backend_address}/fornecedor/criar`,
+        {
+            nome: fornecedor.nome
+        }
+    )
+    return res.data
+}
+
 export const recuperaTodosProdutos = async () =>{
     let res  = await todosProdutosRequest()
     produtos.value = res
-    extrairFornecedores()
-    extrairCategorias()
+    recuperarFornecedores()
+    recuperarCategorias()
 }
 
 export const criaProduto = async (produto:Produto) =>{
     await criaProdutoRequest(produto)
 }
 
-const extrairFornecedores = () => {
-    const fornecedorMap = new Map<number, Fornecedor>()
-
-    produtos.value.forEach((produto) => {
-        if (produto.fornecedor && !fornecedorMap.has(produto.fornecedor.id)) {
-            fornecedorMap.set(produto.fornecedor.id, produto.fornecedor)
-        }
-    })
-
-    fornecedores.value = Array.from(fornecedorMap.values())
+export const criaCategoria = async (categoria:Categoria) =>{
+    await criaCategoriaRequest(categoria)
 }
 
-const extrairCategorias = () => {
-    const categoriaMap = new Map<number, Fornecedor>()
+export const criaFornecedor = async (fornecedor:Fornecedor) =>{
+    await criaFornecedorRequest(fornecedor)
+}
 
-    produtos.value.forEach((produto) => {
-        if (produto.categoria && !categoriaMap.has(produto.categoria.id)) {
-            categoriaMap.set(produto.categoria.id, produto.categoria)
-        }
-    })
+const recuperarFornecedores = async () => {
+    fornecedores.value = await todosFornecedoresRequest()
+}
 
-    categorias.value = Array.from(categoriaMap.values())
+const recuperarCategorias = async () => {
+    categorias.value = await todasCategoriasRequest()
 }

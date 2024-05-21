@@ -6,6 +6,8 @@ import com.logap.backend.Service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/categoria")
 public class CategoriaController {
@@ -20,5 +22,10 @@ public class CategoriaController {
     @PostMapping("/excluir")
     public void excluirCategoria(@RequestBody Categoria categoria){
         categoriaService.excluiCategoria(categoria);
+    }
+
+    @GetMapping("/todas")
+    public List<Categoria> recuperaTodasCategorias(){
+        return categoriaService.recuperaTodasCategorias();
     }
 }

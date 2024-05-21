@@ -5,6 +5,8 @@ import com.logap.backend.Repository.FornecedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FornecedorService {
     @Autowired
@@ -16,5 +18,9 @@ public class FornecedorService {
 
     public void excluirFornecedor(Fornecedor fornecedor){
         fornecedorRepository.delete(fornecedor);
+    }
+
+    public List<Fornecedor> recuperaTodosFornecedores() {
+        return fornecedorRepository.findAll();
     }
 }
