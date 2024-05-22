@@ -44,6 +44,7 @@ export const recuperaTodosProdutos = async () => {
     let res = await todosProdutosRequest()
     produtos.value = res
     aplicarFiltros()
+    aplicaOrdem(ordenacao.value)
     await recuperarFornecedores()
     await recuperarCategorias()
 }
@@ -119,9 +120,8 @@ export const baixarRelatorio = async () => {
     window.URL.revokeObjectURL(linkRelatorio.href)
 }
 
-/* OBSERVA REALIZA ORDENAÇÃO DOS PRODUTOS */
-watch(ordenacao, (novaOrdem: String) => {
-    console.log("Entrou no Watch")
+/* APLICA ORDENAÇÃO SELECIONADA PELO USUÁRIO */
+const aplicaOrdem = (novaOrdem) => {
     switch (novaOrdem) {
         case "Data de Criação":
             produtosFiltrados.value.sort((a: Produto, b: Produto) => {
@@ -164,9 +164,17 @@ watch(ordenacao, (novaOrdem: String) => {
             })
             break
     }
+    if(!decrescente.value) mudarOrdem()
+}
+
+/* OBSERVA REALIZA ORDENAÇÃO DOS PRODUTOS */
+watch(ordenacao, (novaOrdem: String) => {
+    aplicaOrdem(novaOrdem)
+    if(!decrescente.value) mudarOrdem()
+    decrescente.value = true
 })
 
 /* OBERVA E APLICA A INVERSÃO NA ORDEM DOS PRODUTOS */
-watch(decrescente, () => {
+export const mudarOrdem = () => {
     produtosFiltrados.value.reverse()
-})
+}

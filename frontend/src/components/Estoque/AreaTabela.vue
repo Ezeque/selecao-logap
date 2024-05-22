@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from 'vue';
 import CriarProduto from './CriarProduto.vue';
-import { ordenacao, decrescente, produtoExcluir, mostrarDialogoExcluirProduto, baixarRelatorio, erro, loading, produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
+import { mudarOrdem, ordenacao, decrescente, produtoExcluir, mostrarDialogoExcluirProduto, baixarRelatorio, erro, loading, produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
 import { VProgressCircular } from 'vuetify/components';
 import { Produto } from '../../models/Produto';
 import LinhaProduto from '../Utils/LinhaProduto.vue';
@@ -9,8 +9,8 @@ import LinhaProduto from '../Utils/LinhaProduto.vue';
 
 onMounted(async () => {
     try {
+        loading.value = true
         await recuperaTodosProdutos()
-        produtosFiltrados.value.reverse()
     }
     catch (e) {
         erro.value = true
@@ -44,14 +44,18 @@ const deletaProduto = async (id: number) => {
                     Gerar Relatório
                 </VBtn>
             </VCol>
-            <VCol cols="3">
-                <VSelect v-model="ordenacao" :items="['Data de Criação', 'Quantidade', 'Valor', 'Ordem Alfabética']"/>
+            <VCol cols="2">
+                <VSelect v-model="ordenacao" :items="['Data de Criação', 'Quantidade', 'Valor', 'Ordem Alfabética']" />
             </VCol>
             <VCol class="text-center">
                 <VTooltip location="top" text="Inverter Ordem">
                     <template v-slot:activator="{ props }">
-                        <VBtn v-bind="props" color="#5C4BAA" :icon="decrescente ? 'mdi-arrow-up' : 'mdi-arrow-down'"
-                        @click="decrescente = !decrescente" />
+                        <VBtn v-bind="props" color="#5C4BAA" @click="decrescente = !decrescente; mudarOrdem()">
+                            <span>
+                                {{ decrescente ? "Maior" : "Menor" }}
+                                <VIcon icon="mdi-arrow-right" /> {{ decrescente ? "Menor" : "Maior" }}
+                            </span>
+                        </VBtn>
                     </template>
                 </VTooltip>
             </VCol>
@@ -101,7 +105,8 @@ const deletaProduto = async (id: number) => {
 
                     <!-- TABELA COM PRODUTOS -->
 
-                    <LinhaProduto v-for="(produto, index) in produtosFiltrados" :produto="produto" />
+                    <LinhaProduto v-for="(produto, index) in produtosFiltrados" :produto="produto"
+                        :key="`porduto-${index}`" />
                 </tbody>
             </VTable>
         </div>
