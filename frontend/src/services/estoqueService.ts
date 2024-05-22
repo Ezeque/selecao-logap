@@ -13,6 +13,8 @@ export const decrescente: Ref<boolean> = ref(true)
 
 export const produtosFiltrados: Ref<Produto[]> = ref([])
 
+export const produtosEmFalta: Ref<Produto[]> = ref([])
+
 export const fornecedores: Ref<Fornecedor[]> = ref([])
 
 export const categorias: Ref<Categoria[]> = ref([])
@@ -47,12 +49,12 @@ export const recuperaTodosProdutos = async () => {
     aplicaOrdem(ordenacao.value)
     await recuperarFornecedores()
     await recuperarCategorias()
+    await recuperaProdutosFalta()
 }
 
 /* REALIZA BUSCA DE PRODUTOS EM FALTA*/
 export const recuperaProdutosFalta = async () => {
-    let res: Produto[] = await ProdutosFaltaRequest()
-    return res
+    produtosEmFalta.value = await ProdutosFaltaRequest()
 }
 
 /* CRIA PRODUTO */
@@ -164,13 +166,13 @@ const aplicaOrdem = (novaOrdem) => {
             })
             break
     }
-    if(!decrescente.value) mudarOrdem()
+    if (!decrescente.value) mudarOrdem()
 }
 
 /* OBSERVA REALIZA ORDENAÇÃO DOS PRODUTOS */
 watch(ordenacao, (novaOrdem: String) => {
     aplicaOrdem(novaOrdem)
-    if(!decrescente.value) mudarOrdem()
+    if (!decrescente.value) mudarOrdem()
     decrescente.value = true
 })
 
