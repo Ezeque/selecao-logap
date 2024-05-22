@@ -90,7 +90,7 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
             </VRow>
             <VRow>
                 <VCol md="6">
-                    <VTextField :rules="[rules.required]" label="valor" placeholder="Valor do Produto"
+                    <VTextField :rules="[rules.required]" label="Valor (R$)" placeholder="Valor do Produto"
                         hide-details="auto" v-model="novoProduto.valor" />
                 </VCol>
                 <VCol md="6">

@@ -49,7 +49,7 @@ public class RelatorioService {
             tabelaProdutos.addCell("Nome:");
             tabelaProdutos.addCell("Fornecedor:");
             tabelaProdutos.addCell("Categoria:");
-            tabelaProdutos.addCell("Valor:");
+            tabelaProdutos.addCell("Valor (R$):");
             tabelaProdutos.addCell("Quantidade:");
             tabelaProdutos.addCell("Localização:");
             if(produtos.size() == 0){

@@ -53,7 +53,7 @@ const deletaProduto = async (id: number) => {
                         Categoria
                     </th>
                     <th>
-                        Valor
+                        Valor (R$)
                     </th>
                     <th>
                         Quantidade

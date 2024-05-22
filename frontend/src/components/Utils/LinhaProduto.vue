@@ -98,7 +98,7 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
         </td>
 
         <td v-if="editar">
-            <VTextField placeholder="Valor do Produto" label="Valor" v-model="novoProduto.valor" hide-details="auto" />
+            <VTextField placeholder="Valor do Produto" label="Valor (R$)" v-model="novoProduto.valor" hide-details="auto" />
         </td>
 
         <td v-if="editar">
