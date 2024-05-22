@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from 'vue';
 import CriarProduto from './CriarProduto.vue';
-import { produtoExcluir, mostrarDialogoExcluirProduto, baixarRelatorio, erro, loading, produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
+import { ordenacao, decrescente, produtoExcluir, mostrarDialogoExcluirProduto, baixarRelatorio, erro, loading, produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
 import { VProgressCircular } from 'vuetify/components';
 import { Produto } from '../../models/Produto';
 import LinhaProduto from '../Utils/LinhaProduto.vue';
@@ -10,6 +10,7 @@ import LinhaProduto from '../Utils/LinhaProduto.vue';
 onMounted(async () => {
     try {
         await recuperaTodosProdutos()
+        produtosFiltrados.value.reverse()
     }
     catch (e) {
         erro.value = true
@@ -34,12 +35,28 @@ const deletaProduto = async (id: number) => {
 <template>
 
     <div id="layout">
-        <VBtn color="success" class="mb-5 mr-5" @click="mostrarNovoProduto = true">
-            Novo Produto
-        </VBtn>
-        <VBtn @click="baixarRelatorio" color="warning" class="mb-5">
-            Gerar Relatório
-        </VBtn>
+        <VRow>
+            <VCol cols="12" md="8">
+                <VBtn color="success" class="mb-5 mr-5" @click="mostrarNovoProduto = true">
+                    Novo Produto
+                </VBtn>
+                <VBtn @click="baixarRelatorio" color="warning" class="mb-5">
+                    Gerar Relatório
+                </VBtn>
+            </VCol>
+            <VCol cols="3">
+                <VSelect v-model="ordenacao" :items="['Data de Criação', 'Quantidade', 'Valor', 'Ordem Alfabética']"/>
+            </VCol>
+            <VCol class="text-center">
+                <VTooltip location="top" text="Inverter Ordem">
+                    <template v-slot:activator="{ props }">
+                        <VBtn v-bind="props" color="#5C4BAA" :icon="decrescente ? 'mdi-arrow-up' : 'mdi-arrow-down'"
+                        @click="decrescente = !decrescente" />
+                    </template>
+                </VTooltip>
+            </VCol>
+        </VRow>
+
         <div id="layout-tabela">
             <VTable id="tabela" fixed-header>
                 <thead>
@@ -84,7 +101,7 @@ const deletaProduto = async (id: number) => {
 
                     <!-- TABELA COM PRODUTOS -->
 
-                    <LinhaProduto v-for="(produto, index) in produtosFiltrados" :produto="produto"/>
+                    <LinhaProduto v-for="(produto, index) in produtosFiltrados" :produto="produto" />
                 </tbody>
             </VTable>
         </div>
@@ -103,7 +120,7 @@ const deletaProduto = async (id: number) => {
                     Tem certeza de que deseja excluir o seguinte produto?
                 </VCardTitle>
                 <VCardSubtitle class="font-weight-bold text-xl">
-                    Nome: {{produtoExcluir.name}} |
+                    Nome: {{ produtoExcluir.name }} |
                     Fornecedor: {{ produtoExcluir.fornecedor.nome }}
                 </VCardSubtitle>
                 <VCardText>
@@ -153,5 +170,10 @@ th {
 
 #tabela {
     max-height: 28em;
+}
+
+#area-botoes {
+    display: flex;
+    justify-content: space-between;
 }
 </style>

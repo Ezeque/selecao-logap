@@ -1,4 +1,4 @@
-import { Ref, ref } from "vue"
+import { Ref, ref, watch } from "vue"
 import { Produto } from "../models/Produto"
 import { Fornecedor } from "../models/Fornecedor"
 import { Categoria } from "../models/Categoria"
@@ -6,6 +6,10 @@ import { ProdutosFaltaRequest, atualizaProdutoRequest, criaCategoriaRequest, cri
 
 /* RECEBE TODOS OS PRODUTOS*/
 export const produtos: Ref<Produto[]> = ref([])
+
+export const ordenacao: Ref<String> = ref("Data de Criação")
+
+export const decrescente: Ref<boolean> = ref(true)
 
 export const produtosFiltrados: Ref<Produto[]> = ref([])
 
@@ -15,11 +19,11 @@ export const categorias: Ref<Categoria[]> = ref([])
 
 export const mostrarNovoProduto: Ref<boolean> = ref(false)
 
-export const filtroNome: Ref<string|null> = ref(null)
+export const filtroNome: Ref<string | null> = ref(null)
 
-export const filtroCategoria: Ref<string|null> = ref(null)
+export const filtroCategoria: Ref<string | null> = ref(null)
 
-export const filtroFornecedor: Ref<string|null> = ref(null)
+export const filtroFornecedor: Ref<string | null> = ref(null)
 
 export const mostrarEsgotados: Ref<boolean> = ref(true)
 
@@ -55,7 +59,7 @@ export const criaProduto = async (produto: Produto) => {
     await criaProdutoRequest(produto)
 }
 
-export const editarProduto = async(produto: Produto) => {
+export const editarProduto = async (produto: Produto) => {
     await atualizaProdutoRequest(produto)
 }
 
@@ -88,24 +92,24 @@ const recuperarCategorias = async () => {
 /* APLICA OS FILTROS */
 export const aplicarFiltros = async () => {
     produtosFiltrados.value = produtos.value
-    if(filtroNome.value){
+    if (filtroNome.value) {
         produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.name.indexOf(filtroNome.value!) > -1)
     }
-    if(filtroCategoria!.value){
+    if (filtroCategoria!.value) {
         produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.categoria.nome.indexOf(filtroCategoria.value!) > -1)
     }
-    if(filtroFornecedor.value){
+    if (filtroFornecedor.value) {
         produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.fornecedor.nome.indexOf(filtroFornecedor.value!) > -1)
     }
-    if(!mostrarEsgotados.value){
+    if (!mostrarEsgotados.value) {
         produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.quantidade > 0)
     }
 }
 
 /* GERA E REALIZA DOWNLOAD DO RELATÓRIO */
-export const baixarRelatorio = async () =>{
+export const baixarRelatorio = async () => {
     let res = await geraRelatorio()
-    const blob = new Blob([res], {type: "application/pdf"})
+    const blob = new Blob([res], { type: "application/pdf" })
     const linkRelatorio = document.createElement("a")
     linkRelatorio.href = window.URL.createObjectURL(blob)
     linkRelatorio.download = `Relatório`
@@ -114,3 +118,55 @@ export const baixarRelatorio = async () =>{
     document.body.removeChild(linkRelatorio)
     window.URL.revokeObjectURL(linkRelatorio.href)
 }
+
+/* OBSERVA REALIZA ORDENAÇÃO DOS PRODUTOS */
+watch(ordenacao, (novaOrdem: String) => {
+    console.log("Entrou no Watch")
+    switch (novaOrdem) {
+        case "Data de Criação":
+            produtosFiltrados.value.sort((a: Produto, b: Produto) => {
+                if (a.id > b.id) {
+                    return -1
+                }
+                else {
+                    return 1
+                }
+            })
+            break
+        case "Quantidade":
+            produtosFiltrados.value.sort((a: Produto, b: Produto) => {
+                if (a.quantidade > b.quantidade) {
+                    return -1
+                }
+                else {
+                    return 1
+                }
+            })
+            break
+        case "Valor":
+            produtosFiltrados.value.sort((a: Produto, b: Produto) => {
+                if (a.valor > b.valor) {
+                    return -1
+                }
+                else {
+                    return 1
+                }
+            })
+            break
+        case "Ordem Alfabética":
+            produtosFiltrados.value.sort((a: Produto, b: Produto) => {
+                if (a.name > b.name) {
+                    return -1
+                }
+                else {
+                    return 1
+                }
+            })
+            break
+    }
+})
+
+/* OBERVA E APLICA A INVERSÃO NA ORDEM DOS PRODUTOS */
+watch(decrescente, () => {
+    produtosFiltrados.value.reverse()
+})
