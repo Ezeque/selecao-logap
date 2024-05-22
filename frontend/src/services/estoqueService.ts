@@ -115,7 +115,8 @@ export const baixarRelatorio = async () => {
     const blob = new Blob([res], { type: "application/pdf" })
     const linkRelatorio = document.createElement("a")
     linkRelatorio.href = window.URL.createObjectURL(blob)
-    linkRelatorio.download = `Relatório`
+    const data = new Date()
+    linkRelatorio.download = `Relatório-${data.getDay()}-${data.getMonth()}-${data.getFullYear()}`
     document.body.appendChild(linkRelatorio)
     linkRelatorio.click()
     document.body.removeChild(linkRelatorio)
