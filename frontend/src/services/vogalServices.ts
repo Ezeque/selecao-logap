@@ -2,7 +2,7 @@ import axios from "axios";
 import { Ref, ref } from "vue";
 import { vogalRequest } from "../api/vogal";
 
-export const frase: Ref<String> = ref("teste")
+export const frase: Ref<String> = ref("")
 export const arrayChars: Ref<String[]> = ref([])
 export const alvo: Ref<String> = ref("")
 export const mostrarResultado: Ref<boolean> = ref(false)
