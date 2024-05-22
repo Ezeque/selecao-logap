@@ -35,32 +35,6 @@ const deletaProduto = async (id: number) => {
 <template>
 
     <div id="layout">
-        <VRow>
-            <VCol cols="12" md="8">
-                <VBtn color="success" class="mb-5 mr-5" @click="mostrarNovoProduto = true">
-                    Novo Produto
-                </VBtn>
-                <VBtn @click="baixarRelatorio" color="warning" class="mb-5">
-                    Gerar Relatório
-                </VBtn>
-            </VCol>
-            <VCol cols="2">
-                <VSelect v-model="ordenacao" :items="['Data de Criação', 'Quantidade', 'Valor', 'Ordem Alfabética']" />
-            </VCol>
-            <VCol class="text-center">
-                <VTooltip location="top" text="Inverter Ordem">
-                    <template v-slot:activator="{ props }">
-                        <VBtn v-bind="props" color="#5C4BAA" @click="decrescente = !decrescente; mudarOrdem()">
-                            <span>
-                                {{ decrescente ? "Maior" : "Menor" }}
-                                <VIcon icon="mdi-arrow-right" /> {{ decrescente ? "Menor" : "Maior" }}
-                            </span>
-                        </VBtn>
-                    </template>
-                </VTooltip>
-            </VCol>
-        </VRow>
-
         <div id="layout-tabela">
             <VTable id="tabela" fixed-header>
                 <thead>

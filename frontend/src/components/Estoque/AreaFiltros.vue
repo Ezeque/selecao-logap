@@ -4,6 +4,13 @@ import { categorias, fornecedores, filtroNome, filtroCategoria, filtroFornecedor
 
 const form:Ref<any> = ref()
 
+const limparFiltros = () => {
+    filtroNome.value = null
+    filtroCategoria.value = null
+    filtroFornecedor.value = null
+    mostrarEsgotados.value = true
+}
+
 
 
 </script>
@@ -34,7 +41,8 @@ const form:Ref<any> = ref()
                 </VRow>
                 <VRow>
                     <VCol cols="12" class="d-flex justify-center py-0">
-                        <VBtn @click="aplicarFiltros" color="#5C4BAA" width="100%">Filtrar Resultados</VBtn>
+                        <VBtn @click="aplicarFiltros" color="#5C4BAA" width="50%" class="mr-3">Filtrar Resultados</VBtn>
+                        <VBtn @click="limparFiltros" color="error" width="50%">Limpar Filtros</VBtn>
                     </VCol>
                 </VRow>
             </VCol>

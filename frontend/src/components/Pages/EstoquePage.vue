@@ -6,11 +6,11 @@ import HeaderEstoque from '../Estoque/HeaderEstoque.vue';
 
 <template>
     <VRow>
-        <VCol cols="12" md="7">
+        <VCol style="margin-left:6em" class="" cols="12" lg="5">
             <HeaderEstoque/>
         </VCol>
 
-        <VCol cols="12" md="5">
+        <VCol cols="12" lg="6">
             <AreaFiltros/>
         </VCol>
     </VRow>
