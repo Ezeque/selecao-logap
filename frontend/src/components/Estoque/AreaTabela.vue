@@ -5,7 +5,9 @@ import { mudarOrdem, ordenacao, decrescente, produtoExcluir, mostrarDialogoExclu
 import { VProgressCircular } from 'vuetify/components';
 import { Produto } from '../../models/Produto';
 import LinhaProduto from '../Utils/LinhaProduto.vue';
+import { useDisplay } from 'vuetify';
 
+const isMobile = useDisplay().smAndDown
 
 onMounted(async () => {
     try {
@@ -33,7 +35,7 @@ const deletaProduto = async (id: number) => {
 
 <template>
 
-    <div id="layout">
+    <div :id="isMobile ? '' : 'layout'">
         <div id="layout-tabela">
             <VTable id="tabela" fixed-header>
                 <thead>
@@ -135,7 +137,7 @@ const deletaProduto = async (id: number) => {
 }
 
 #layout {
-    margin-left: 8em;
+    margin-left: 6em;
     padding: 0.5em;
 }
 

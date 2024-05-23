@@ -14,7 +14,6 @@ import SelecaoModulo from './components/Utils/SelecaoModulo.vue'
 </script>
 <style scoped>
 #go-back{
- float: left;
  margin: 1em; 
 }
 </style>

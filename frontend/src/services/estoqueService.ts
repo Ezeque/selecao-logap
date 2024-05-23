@@ -29,6 +29,8 @@ export const filtroFornecedor: Ref<string | null> = ref(null)
 
 export const mostrarEsgotados: Ref<boolean> = ref(true)
 
+export const loadingRelatorio: Ref<boolean> = ref(false)
+
 /* GUARDA SE TELA ESTÁ CARREGANDO */
 export const loading: Ref<boolean> = ref(true)
 
@@ -113,6 +115,7 @@ export const aplicarFiltros = async () => {
 
 /* GERA E REALIZA DOWNLOAD DO RELATÓRIO */
 export const baixarRelatorio = async () => {
+    loadingRelatorio.value = true
     let res = await geraRelatorio()
     const blob = new Blob([res], { type: "application/pdf" })
     const linkRelatorio = document.createElement("a")
@@ -123,6 +126,7 @@ export const baixarRelatorio = async () => {
     linkRelatorio.click()
     document.body.removeChild(linkRelatorio)
     window.URL.revokeObjectURL(linkRelatorio.href)
+    loadingRelatorio.value = false
 }
 
 /* APLICA ORDENAÇÃO SELECIONADA PELO USUÁRIO */
