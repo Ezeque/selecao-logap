@@ -14,7 +14,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry){
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")
+                        .allowedOrigins("http://localhost:3000", "https://selecao-logap-front.vercel.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowCredentials(true)
                         .maxAge(3600);
