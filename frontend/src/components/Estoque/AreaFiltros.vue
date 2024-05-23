@@ -41,8 +41,8 @@ const limparFiltros = () => {
                 </VRow>
                 <VRow>
                     <VCol cols="12" class="d-flex justify-center py-0">
-                        <VBtn @click="aplicarFiltros" color="#5C4BAA" width="50%" class="mr-3">Filtrar Resultados</VBtn>
-                        <VBtn @click="limparFiltros" color="error" width="50%">Limpar Filtros</VBtn>
+                        <VBtn @click="aplicarFiltros" color="#5C4BAA" width="45%" class="mr-3">Filtrar Resultados</VBtn>
+                        <VBtn @click="limparFiltros" color="error" width="45%">Limpar Filtros</VBtn>
                     </VCol>
                 </VRow>
             </VCol>

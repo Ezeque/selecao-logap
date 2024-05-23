@@ -1,45 +1,55 @@
 <script setup lang="ts">
 import { Ref, onMounted, ref } from 'vue';
+import { useDisplay } from 'vuetify'
 import { Produto } from '../../models/Produto';
-import { produtosEmFalta, ordenacao, mostrarNovoProduto, baixarRelatorio, decrescente, mudarOrdem } from '../../services/estoqueService';
+import { loadingRelatorio, produtosEmFalta, ordenacao, mostrarNovoProduto, baixarRelatorio, decrescente, mudarOrdem } from '../../services/estoqueService';
+import { VProgressCircular } from 'vuetify/components';
+
+const isMobile = useDisplay().smAndDown
 
 </script>
 
 <template>
     <div>
-            <VCol cols="12" lg="12">
-                <h1>
-                    Lista de Produtos
-                </h1>
-                <span>{{ produtosEmFalta.length }} Produtos em Falta</span>
-            </VCol>
-            <VCol cols="12">
-                <VBtn width="auto" color="success" class="mb-5 mr-5" @click="mostrarNovoProduto = true">
-                    Novo Produto
-                </VBtn>
-                <VBtn width="auto" @click="baixarRelatorio" color="warning" class="mb-5">
+        <VCol class="d-md-block d-none" lg="12">
+            <h1>
+                Lista de Produtos
+            </h1>
+            <span>{{ produtosEmFalta.length }} Produtos em Falta</span>
+        </VCol>
+        <VCol class="d-flex justify-sm-start justify-center p-0" cols="12">
+            <VBtn :width="isMobile ? '45%' : ''" color="success" class="mr-3" @click="mostrarNovoProduto = true">
+                Novo Produto
+            </VBtn>
+            <VBtn :width="isMobile ? '45%' : ''" @click="baixarRelatorio" color="warning" class="mb-5">
+                <span class="texto-botao" v-if="!loadingRelatorio">
                     Gerar Relatório
-                </VBtn>
-            </VCol>
+                </span>
+                <VProgressCircular indeterminate v-else/>
+            </VBtn>
+        </VCol>
 
-            <VCol cols="12" lg="10">
-                <VSelect hide-details v-model="ordenacao" :items="['Data de Criação', 'Quantidade', 'Valor', 'Ordem Alfabética']">
-                    <template #append>
-                        <VTooltip location="top" text="Inverter Ordem">
-                            <template v-slot:activator="{ props }">
-                                <VBtn v-bind="props" color="#5C4BAA" @click="decrescente = !decrescente; mudarOrdem()">
-                                    <span class="texto-botao-ordem">
-                                        {{ decrescente ? "Maior" : "Menor" }}
-                                        <VIcon class="texto-botao-ordem" icon="mdi-arrow-right" /> {{ decrescente ?
-                                            "Menor"
+
+        <VCol cols="12" lg="10">
+            <VSelect hide-details v-model="ordenacao"
+                :items="['Data de Criação', 'Quantidade', 'Valor', 'Ordem Alfabética']">
+                <template #append>
+                    <VTooltip location="top" text="Inverter Ordem">
+                        <template v-slot:activator="{ props }">
+                            <VBtn v-bind="props" color="#5C4BAA" @click="decrescente = !decrescente; mudarOrdem()">
+                                <span class="texto-botao">
+                                    {{ decrescente ? "Maior" : "Menor" }}
+                                    <VIcon class="texto-botao-ordem" icon="mdi-arrow-right" /> {{ decrescente ?
+                                        "Menor"
                                         : "Maior" }}
-                                    </span>
-                                </VBtn>
-                            </template>
-                        </VTooltip>
-                    </template>
-                </VSelect>
-            </VCol>
+                                </span>
+                            </VBtn>
+                        </template>
+                    </VTooltip>
+                </template>
+            </VSelect>
+        </VCol>
+
     </div>
 
 </template>
@@ -62,7 +72,7 @@ span {
     color: #AD1717;
 }
 
-.texto-botao-ordem{
+.texto-botao {
     color: white
 }
 </style>
