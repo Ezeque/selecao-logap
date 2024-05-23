@@ -68,7 +68,7 @@ onMounted(() =>{
                         v-model="novoProduto.name" />
                 </VCol>
             </VRow>
-            {{ categoriaAutocomplete }}
+            {{ categoriaAutocomplete? }}
             <VRow>
                 <VCol md="6">
                     <VAutocomplete no-data-text="Nenhum Resultado" :rules="[rules.required]" ref="categoriaAutocomplete" label="Categoria"
