@@ -72,7 +72,7 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
                         placeholder="Categoria do Produto" return-object :items="categorias" item-title="nome"
                         v-model="novoProduto.categoria" hide-details="auto">
 
-                        <template v-if="mostrarNovoProduto" #append-inner>
+                        <template v-if="mostrarNovoProduto" #prepend-item>
                             <VBtn @click="salvarCategoria(categoriaAutocomplete?.modelValue)" color="success"
                                 v-if="categoriaAutocomplete?.filteredItems.length == 0 && categoriaAutocomplete.modelValue != ''">
                                 Criar Categoria {{ categoriaAutocomplete?.modelValue }}
@@ -91,7 +91,7 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
                     <VAutocomplete no-data-text="Nenhum Resultado" :rules="[rules.required]" ref="fornecedorAutocomplete" label="Fornecedor"
                         placeholder="Fornecedor do Produto" return-object :items="fornecedores" item-title="nome"
                         v-model="novoProduto.fornecedor" hide-details="auto">
-                        <template v-if="mostrarNovoProduto" #append-inner>
+                        <template v-if="mostrarNovoProduto" #prepend-item>
                             <VBtn @click="salvarFornecedor(fornecedorAutocomplete?.modelValue)" color="success"
                                 v-if="fornecedorAutocomplete?.filteredItems.length == 0 && fornecedorAutocomplete.modelValue != ''">
                                 Criar Fornecedor {{ fornecedorAutocomplete?.modelValue }}
