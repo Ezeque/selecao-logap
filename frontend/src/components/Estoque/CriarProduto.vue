@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue';
+import { Ref, onMounted, ref } from 'vue';
 import { criaCategoria, criaFornecedor, criaProduto, mostrarNovoProduto, recuperaTodosProdutos, categorias, fornecedores } from '../../services/estoqueService';
 import { Produto } from '../../models/Produto';
 import { Categoria } from '../../models/Categoria';
@@ -43,6 +43,9 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
     loadingFornecedor.value = false
 }
 
+onMounted(() =>{
+    console.log(categoriaAutocomplete)
+})
 </script>
 <template>
     <VCard>
@@ -65,9 +68,9 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
                         v-model="novoProduto.name" />
                 </VCol>
             </VRow>
+            {{ categoriaAutocomplete }}
             <VRow>
                 <VCol md="6">
-
                     <VAutocomplete no-data-text="Nenhum Resultado" :rules="[rules.required]" ref="categoriaAutocomplete" label="Categoria"
                         placeholder="Categoria do Produto" return-object :items="categorias" item-title="nome"
                         v-model="novoProduto.categoria" hide-details="auto">
@@ -86,7 +89,6 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
                         </template>
                     </VAutocomplete>
                 </VCol>
-
                 <VCol md="6">
                     <VAutocomplete no-data-text="Nenhum Resultado" :rules="[rules.required]" ref="fornecedorAutocomplete" label="Fornecedor"
                         placeholder="Fornecedor do Produto" return-object :items="fornecedores" item-title="nome"
