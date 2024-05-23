@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue';
+import { Ref, ref, watch } from 'vue';
 import { Produto } from '../../models/Produto';
 import { VAutocomplete, VTextField } from 'vuetify/components';
 import { produtoExcluir, mostrarDialogoExcluirProduto, erro, loading, fornecedores, categorias, criaCategoria, recuperaTodosProdutos, criaFornecedor, criaProduto, editarProduto } from '../../services/estoqueService';
@@ -14,17 +14,20 @@ const novoProduto: Ref<Produto> = ref(props.produto)
 const categoriaAutocomplete: Ref<any> = ref()
 const fornecedorAutocomplete: Ref<any> = ref()
 
+    watch(props, ((novoValor) => {
+        novoProduto.value = novoValor.produto!
+    }))
+
 const edicao = async (produto: Produto) => {
-    loading.value = true
     try {
         /* ATUALIZARÁ O PRODUTO SALVO NO BANCO */
         await editarProduto(produto)
         editar.value = !(editar.value)
+        await recuperaTodosProdutos()
     } catch (e) {
         loading.value = false
         erro.value = true
     }
-    loading.value = false
     erro.value = false
 
 }
@@ -72,7 +75,7 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
         </td>
 
         <td v-if="editar">
-            <VAutocomplete ref="fornecedorAutocomplete" item-title="nome" return-object :items="fornecedores"
+            <VAutocomplete no-data-text="Nenhum Resultado" ref="fornecedorAutocomplete" item-title="nome" return-object :items="fornecedores"
                 placeholder="Fornecedor do Produto" label="Fornecedor" v-model="novoProduto.fornecedor"
                 hide-details="auto">
                 <template #append-item>
@@ -85,7 +88,7 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
         </td>
 
         <td v-if="editar">
-            <VAutocomplete ref="categoriaAutocomplete" item-title="nome" return-object :items="categorias"
+            <VAutocomplete no-data-text="Nenhum Resultado" ref="categoriaAutocomplete" item-title="nome" return-object :items="categorias"
                 placeholder="Categoria do Produto" label="Categoria" v-model="novoProduto.categoria"
                 hide-details="auto">
                 <template #append-item>
@@ -98,7 +101,7 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
         </td>
 
         <td v-if="editar">
-            <VTextField placeholder="Valor do Produto" label="Valor" v-model="novoProduto.valor" hide-details="auto" />
+            <VTextField placeholder="Valor do Produto" label="Valor (R$)" v-model="novoProduto.valor" hide-details="auto" />
         </td>
 
         <td v-if="editar">
@@ -121,7 +124,7 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
             </VTooltip>
             <VTooltip location="top" :text="editar ? 'Confirmar' : 'Editar'">
                 <template v-slot:activator="{ props }">
-                    <VBtn @click="editar? edicao(novoProduto) : editar = true" v-bind="props" color="success" size="30"
+                    <VBtn @click="editar? edicao(novoProduto) : editar = true;" v-bind="props" color="success" size="30"
                         :icon="editar ? 'mdi-check' : 'mdi-pencil'" />
                 </template>
             </VTooltip>

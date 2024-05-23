@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from 'vue';
 import CriarProduto from './CriarProduto.vue';
-import { produtoExcluir, mostrarDialogoExcluirProduto, baixarRelatorio, erro, loading, produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
+import { mudarOrdem, ordenacao, decrescente, produtoExcluir, mostrarDialogoExcluirProduto, baixarRelatorio, erro, loading, produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
 import { VProgressCircular } from 'vuetify/components';
 import { Produto } from '../../models/Produto';
 import LinhaProduto from '../Utils/LinhaProduto.vue';
@@ -13,8 +13,8 @@ onMounted(async () => {
     }
     catch (e) {
         erro.value = true
+        loading.value = false
     }
-    loading.value = false
 })
 
 /* REALIZA DELEÇÃO DE PRODUTO */
@@ -34,12 +34,6 @@ const deletaProduto = async (id: number) => {
 <template>
 
     <div id="layout">
-        <VBtn color="success" class="mb-5 mr-5" @click="mostrarNovoProduto = true">
-            Novo Produto
-        </VBtn>
-        <VBtn @click="baixarRelatorio" color="warning" class="mb-5">
-            Gerar Relatório
-        </VBtn>
         <div id="layout-tabela">
             <VTable id="tabela" fixed-header>
                 <thead>
@@ -53,7 +47,7 @@ const deletaProduto = async (id: number) => {
                         Categoria
                     </th>
                     <th>
-                        Valor
+                        Valor (R$)
                     </th>
                     <th>
                         Quantidade
@@ -84,7 +78,8 @@ const deletaProduto = async (id: number) => {
 
                     <!-- TABELA COM PRODUTOS -->
 
-                    <LinhaProduto v-for="(produto, index) in produtosFiltrados" :produto="produto"/>
+                    <LinhaProduto v-if="!loading && !erro" v-for="(produto, index) in produtosFiltrados" :produto="produto"
+                        :key="`porduto-${index}`" />
                 </tbody>
             </VTable>
         </div>
@@ -103,7 +98,7 @@ const deletaProduto = async (id: number) => {
                     Tem certeza de que deseja excluir o seguinte produto?
                 </VCardTitle>
                 <VCardSubtitle class="font-weight-bold text-xl">
-                    Nome: {{produtoExcluir.name}} |
+                    Nome: {{ produtoExcluir.name }} |
                     Fornecedor: {{ produtoExcluir.fornecedor.nome }}
                 </VCardSubtitle>
                 <VCardText>
@@ -153,5 +148,10 @@ th {
 
 #tabela {
     max-height: 28em;
+}
+
+#area-botoes {
+    display: flex;
+    justify-content: space-between;
 }
 </style>
