@@ -28,10 +28,10 @@ const limparFiltros = () => {
                 </VRow>
                 <VRow>
                     <VCol cols="6" class="py-0">
-                        <VAutocomplete :items="categorias" item-title="nome" item-value="nome" v-model="filtroCategoria" label="Categoria:" placeholder="Nome da Categoria"></VAutocomplete>
+                        <VAutocomplete no-data-text="Nenhum Resultado" :items="categorias" item-title="nome" item-value="nome" v-model="filtroCategoria" label="Categoria:" placeholder="Nome da Categoria"></VAutocomplete>
                     </VCol>
                     <VCol cols="6" class="py-0">
-                        <VAutocomplete :items="fornecedores" item-title="nome" item-value="nome" v-model="filtroFornecedor" label="Fornecedor:" placeholder="Nome do Fornecedor"></VAutocomplete>
+                        <VAutocomplete no-data-text="Nenhum Resultado" :items="fornecedores" item-title="nome" item-value="nome" v-model="filtroFornecedor" label="Fornecedor:" placeholder="Nome do Fornecedor"></VAutocomplete>
                     </VCol>
                 </VRow>
                 <VRow>
