@@ -43,6 +43,7 @@ export const produtoExcluir: Ref<Produto | null> = ref(null)
 
 /* REALIZA BUSCA DE PRODUTOS */
 export const recuperaTodosProdutos = async () => {
+    loading.value = true
     let res = await todosProdutosRequest()
     produtos.value = res
     aplicarFiltros()
@@ -50,6 +51,7 @@ export const recuperaTodosProdutos = async () => {
     await recuperarFornecedores()
     await recuperarCategorias()
     await recuperaProdutosFalta()
+    loading.value = false
 }
 
 /* REALIZA BUSCA DE PRODUTOS EM FALTA*/

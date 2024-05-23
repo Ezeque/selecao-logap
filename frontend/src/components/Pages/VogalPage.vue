@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { VCol, VTextField } from 'vuetify/components';
-import { recuperaVogal, arrayChars, frase, alvo, mostrarResultado } from '../../services/vogalServices';
+import { VCol, VProgressCircular, VTextField } from 'vuetify/components';
+import { recuperaVogal, arrayChars, frase, alvo, mostrarResultado, loading } from '../../services/vogalServices';
 
 
 </script>
@@ -20,7 +20,10 @@ import { recuperaVogal, arrayChars, frase, alvo, mostrarResultado } from '../../
                     <VIcon size="30" icon="mdi-magnify"/>
                 </VBtn>
             </VForm>
-            <div v-if="mostrarResultado" id="resultado">
+
+            <VProgressCircular v-if="loading" indeterminate />
+
+            <div v-if="mostrarResultado && !loading" id="resultado">
                 <span class="">
                     Resultado:
                 </span>

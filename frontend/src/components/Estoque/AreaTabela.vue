@@ -9,13 +9,12 @@ import LinhaProduto from '../Utils/LinhaProduto.vue';
 
 onMounted(async () => {
     try {
-        loading.value = true
         await recuperaTodosProdutos()
     }
     catch (e) {
         erro.value = true
+        loading.value = false
     }
-    loading.value = false
 })
 
 /* REALIZA DELEÇÃO DE PRODUTO */
@@ -79,7 +78,7 @@ const deletaProduto = async (id: number) => {
 
                     <!-- TABELA COM PRODUTOS -->
 
-                    <LinhaProduto v-for="(produto, index) in produtosFiltrados" :produto="produto"
+                    <LinhaProduto v-if="!loading && !erro" v-for="(produto, index) in produtosFiltrados" :produto="produto"
                         :key="`porduto-${index}`" />
                 </tbody>
             </VTable>

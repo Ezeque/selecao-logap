@@ -19,7 +19,6 @@ const fornecedorAutocomplete: Ref<any> = ref()
     }))
 
 const edicao = async (produto: Produto) => {
-    loading.value = true
     try {
         /* ATUALIZARÁ O PRODUTO SALVO NO BANCO */
         await editarProduto(produto)
@@ -29,7 +28,6 @@ const edicao = async (produto: Produto) => {
         loading.value = false
         erro.value = true
     }
-    loading.value = false
     erro.value = false
 
 }
@@ -77,7 +75,7 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
         </td>
 
         <td v-if="editar">
-            <VAutocomplete ref="fornecedorAutocomplete" item-title="nome" return-object :items="fornecedores"
+            <VAutocomplete no-data-text="Nenhum Resultado" ref="fornecedorAutocomplete" item-title="nome" return-object :items="fornecedores"
                 placeholder="Fornecedor do Produto" label="Fornecedor" v-model="novoProduto.fornecedor"
                 hide-details="auto">
                 <template #append-item>
@@ -90,7 +88,7 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
         </td>
 
         <td v-if="editar">
-            <VAutocomplete ref="categoriaAutocomplete" item-title="nome" return-object :items="categorias"
+            <VAutocomplete no-data-text="Nenhum Resultado" ref="categoriaAutocomplete" item-title="nome" return-object :items="categorias"
                 placeholder="Categoria do Produto" label="Categoria" v-model="novoProduto.categoria"
                 hide-details="auto">
                 <template #append-item>

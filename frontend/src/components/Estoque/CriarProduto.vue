@@ -8,6 +8,8 @@ import { Fornecedor } from '../../models/Fornecedor';
 const formValid: Ref<boolean> = ref()
 const categoriaAutocomplete: Ref<any> = ref({ filteredItems: [] })
 const fornecedorAutocomplete: Ref<any> = ref({ filteredItems: [] })
+const loadingCategoria: Ref<boolean> = ref(false)
+const loadingFornecedor: Ref<boolean> = ref(false)
 
 const rules = {
     required: (valor: string) => !!valor || 'Campo Obrigatório'
@@ -26,15 +28,19 @@ const novoFornecedor: Ref<Fornecedor> = ref(new Fornecedor())
 }
 
 const salvarCategoria = async (nomeCategoria: string) => {
+    loadingCategoria.value = true
     novaCategoria.value.nome = nomeCategoria
     await criaCategoria(novaCategoria.value)
     await recuperaTodosProdutos()
+    loadingCategoria.value = false
 }
 
 const salvarFornecedor = async (nomeFornecedor: string) => {
+    loadingFornecedor.value = true
     novoFornecedor.value.nome = nomeFornecedor
     await criaFornecedor(novoFornecedor.value)
     await recuperaTodosProdutos()
+    loadingFornecedor.value = false
 }
 
 </script>
@@ -62,7 +68,7 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
             <VRow>
                 <VCol md="6">
 
-                    <VAutocomplete :rules="[rules.required]" ref="categoriaAutocomplete" label="Categoria"
+                    <VAutocomplete no-data-text="Nenhum Resultado" :rules="[rules.required]" ref="categoriaAutocomplete" label="Categoria"
                         placeholder="Categoria do Produto" return-object :items="categorias" item-title="nome"
                         v-model="novoProduto.categoria" hide-details="auto">
 
@@ -72,11 +78,17 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
                                 Criar Categoria {{ categoriaAutocomplete?.modelValue }}
                             </VBtn>
                         </template>
+
+                        <template v-if="loadingCategoria" #prepend-item>
+                            <div class="text-center">
+                                <VProgressCircular color="#5C4BAA" indeterminate/>
+                            </div>
+                        </template>
                     </VAutocomplete>
                 </VCol>
 
                 <VCol md="6">
-                    <VAutocomplete :rules="[rules.required]" ref="fornecedorAutocomplete" label="Fornecedor"
+                    <VAutocomplete no-data-text="Nenhum Resultado" :rules="[rules.required]" ref="fornecedorAutocomplete" label="Fornecedor"
                         placeholder="Fornecedor do Produto" return-object :items="fornecedores" item-title="nome"
                         v-model="novoProduto.fornecedor" hide-details="auto">
                         <template v-if="mostrarNovoProduto" #append-inner>
@@ -84,6 +96,12 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
                                 v-if="fornecedorAutocomplete?.filteredItems.length == 0 && fornecedorAutocomplete.modelValue != ''">
                                 Criar Fornecedor {{ fornecedorAutocomplete?.modelValue }}
                             </VBtn>
+                        </template>
+
+                        <template v-if="loadingFornecedor" #prepend-item>
+                            <div class="text-center">
+                                <VProgressCircular color="#5C4BAA" indeterminate/>
+                            </div>
                         </template>
                     </VAutocomplete>
                 </VCol>
