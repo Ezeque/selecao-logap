@@ -72,14 +72,14 @@ const salvarFornecedor = async (nomeFornecedor: string) => {
                         placeholder="Categoria do Produto" return-object :items="categorias" item-title="nome"
                         v-model="novoProduto.categoria" hide-details="auto">
 
-                        <template v-if="mostrarNovoProduto" #prepend-inner>
+                        <template v-if="mostrarNovoProduto" #prepend-item>
                             <VBtn @click="salvarCategoria(categoriaAutocomplete?.modelValue)" color="success"
                                 v-if="categoriaAutocomplete?.filteredItems.length == 0 && categoriaAutocomplete.modelValue != ''">
                                 Criar Categoria {{ categoriaAutocomplete?.modelValue }}
                             </VBtn>
                         </template>
 
-                        <template v-if="loadingCategoria" #prepend-inner>
+                        <template v-if="loadingCategoria" #prepend-item>
                             <div class="text-center">
                                 <VProgressCircular color="#5C4BAA" indeterminate/>
                             </div>
