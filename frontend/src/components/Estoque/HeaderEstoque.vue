@@ -2,7 +2,7 @@
 import { Ref, onMounted, ref } from 'vue';
 import { useDisplay } from 'vuetify'
 import { Produto } from '../../models/Produto';
-import { loadingRelatorio, produtosEmFalta, ordenacao, mostrarNovoProduto, baixarRelatorio, decrescente, mudarOrdem } from '../../services/estoqueService';
+import { loadingRelatorio, produtosEmFalta, ordenacao, mostrarCriacao, baixarRelatorio, decrescente, mudarOrdem } from '../../services/estoqueService';
 import { VProgressCircular } from 'vuetify/components';
 
 const isMobile = useDisplay().smAndDown
@@ -18,8 +18,8 @@ const isMobile = useDisplay().smAndDown
             <span>{{ produtosEmFalta.length }} Produtos em Falta</span>
         </VCol>
         <VCol class="d-flex justify-sm-start justify-center p-0" cols="12">
-            <VBtn :width="isMobile ? '45%' : ''" color="success" class="mr-3" @click="mostrarNovoProduto = true">
-                Novo Produto
+            <VBtn :width="isMobile ? '45%' : ''" color="success" class="mr-3" @click="mostrarCriacao = true">
+                Criar
             </VBtn>
             <VBtn :width="isMobile ? '45%' : ''" @click="baixarRelatorio" color="warning" class="mb-5">
                 <span class="texto-botao" v-if="!loadingRelatorio">

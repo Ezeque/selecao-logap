@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from 'vue';
 import CriarProduto from './CriarProduto.vue';
-import { mudarOrdem, ordenacao, decrescente, produtoExcluir, mostrarDialogoExcluirProduto, baixarRelatorio, erro, loading, produtosFiltrados, recuperaTodosProdutos, mostrarNovoProduto, excluiProduto } from '../../services/estoqueService';
+import { mudarOrdem, ordenacao, decrescente, produtoExcluir, mostrarDialogoExcluirProduto, baixarRelatorio, erro, loading, produtosFiltrados, recuperaTodosProdutos, mostrarCriacao, excluiProduto } from '../../services/estoqueService';
 import { VProgressCircular } from 'vuetify/components';
 import { Produto } from '../../models/Produto';
 import LinhaProduto from '../Utils/LinhaProduto.vue';
@@ -88,7 +88,7 @@ const deletaProduto = async (id: number) => {
 
         <!-- DIALOG DE CRIAÇÃO DE PRODUTO -->
 
-        <VDialog fullscreen v-model="mostrarNovoProduto">
+        <VDialog fullscreen v-model="mostrarCriacao">
             <CriarProduto />
         </VDialog>
 
