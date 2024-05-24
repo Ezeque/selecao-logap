@@ -103,10 +103,10 @@ export const aplicarFiltros = async () => {
         produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.name.indexOf(filtroNome.value!) > -1)
     }
     if (filtroCategoria!.value) {
-        produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.categoria.nome.indexOf(filtroCategoria.value!) > -1)
+        produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.categoria.nome == filtroCategoria.value!)
     }
     if (filtroFornecedor.value) {
-        produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.fornecedor.nome.indexOf(filtroFornecedor.value!) > -1)
+        produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.fornecedor.nome == filtroFornecedor.value!)
     }
     if (!mostrarEsgotados.value) {
         produtosFiltrados.value = produtosFiltrados.value.filter(produto => produto.quantidade > 0)
