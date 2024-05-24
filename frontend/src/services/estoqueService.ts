@@ -19,7 +19,7 @@ export const fornecedores: Ref<Fornecedor[]> = ref([])
 
 export const categorias: Ref<Categoria[]> = ref([])
 
-export const mostrarNovoProduto: Ref<boolean> = ref(false)
+export const mostrarCriacao: Ref<boolean> = ref(false)
 
 export const filtroNome: Ref<string | null> = ref(null)
 
